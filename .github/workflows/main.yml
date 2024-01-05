@@ -1,0 +1,86 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Scheduled Tests for Demo Purposes
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    env:
+      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+        
+    - name: Run Basic Login Test
+      run: mvn test -pl DesktopExamples -Dtest=BasicLoginTest
+      continue-on-error: true
+
+    - name: Run Basic Login Test That Fails
+      run: mvn test -pl DesktopExamples -Dtest=FailureAnalysisTest
+      continue-on-error: true   
+      
+    - name: Run Parallel Cross Browser Tests
+      run: mvn test -pl DesktopExamples -Dtest=ParallelCrossBrowserTests
+      continue-on-error: true
+      
+    - name: Run Accessibility Test
+      run: mvn test -pl DesktopExamples -Dtest=AccessibilityTest
+      continue-on-error: true
+      
+    - name: Run Performance Test
+      run: mvn test -pl DesktopExamples -Dtest=PerformanceTest
+      continue-on-error: true
+      
+    - name: Run Emu Native App Test
+      run: mvn test -pl MobileExamples -Dtest=EmuNativeAppTest
+      continue-on-error: true
+    
+    - name: Run Emu Web App Test
+      run: mvn test -pl MobileExamples -Dtest=EmuWebAppTest
+      continue-on-error: true
+      
+    - name: Run Sim Native App Test
+      run: mvn test -pl MobileExamples -Dtest=SimNativeAppTest
+      continue-on-error: true
+
+    - name: Run Sim Web App Test
+      run: mvn test -pl MobileExamples -Dtest=SimWebAppTest
+      continue-on-error: true
+
+    - name: Run Android Native App Test
+      run: mvn test -pl MobileExamples -Dtest=AndroidNativeAppTest
+      continue-on-error: true
+      
+    - name: Run Android Web App Test
+      run: mvn test -pl MobileExamples -Dtest=AndroidWebAppTest
+      continue-on-error: true
+      
+    - name: Run App Crash Test
+      run: mvn test -pl MobileExamples -Dtest=AppCrashTest
+      continue-on-error: true
+    
+    - name: Run iOS Native App Test
+      run: mvn test -pl MobileExamples -Dtest=iOSNativeAppTest
+      continue-on-error: true
+      
+    - name: Run iOS Web App Test
+      run: mvn test -pl MobileExamples -Dtest=iOSWebAppTest
+      continue-on-error: true
+
+    - name: Run Parallel Real Device Tests
+      run: mvn test -pl MobileExamples -Dtest=ParallelRealDeviceTests
+      continue-on-error: true
+
