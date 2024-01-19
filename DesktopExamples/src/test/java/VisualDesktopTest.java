@@ -30,6 +30,7 @@ public class VisualDesktopTest {
     private static VisualApi visual;
     private static final String username = System.getenv("SAUCE_USERNAME");
     private static final String accessKey = System.getenv("SAUCE_ACCESS_KEY");
+    private static boolean modifyPage = true; //Set to "true" in order to demonstrate UI changes
 
     @BeforeMethod
     public void setup(Method method) throws MalformedURLException {
@@ -95,14 +96,13 @@ public class VisualDesktopTest {
         CheckOptions options = new CheckOptions();
         options.setIgnoreElements(List.of(productText));
         
-        /*
-        //Uncomment to modify webpage
-        driver.executeScript("document.getElementById('add-to-cart-sauce-labs-bolt-t-shirt').style.backgroundColor = '#cef6d1';");
-        driver.executeScript("arguments[0].innerText = 'Potatoes'", productText);
-        driver.executeScript("arguments[0].style.height = '150px'", bikelight);
-        driver.executeScript("arguments[0].style.visibility = 'hidden'", cart);
-        driver.executeScript("arguments[0].style.display = 'none'", price);
-         */
+        if(modifyPage == true) { //Execute JS to modify elements to demonstrate Visual changes
+            driver.executeScript("document.getElementById('add-to-cart-sauce-labs-bolt-t-shirt').style.backgroundColor = '#cef6d1';");
+            driver.executeScript("arguments[0].innerText = 'Potatoes'", productText);
+            driver.executeScript("arguments[0].style.height = '150px'", bikelight);
+            driver.executeScript("arguments[0].style.visibility = 'hidden'", cart);
+            driver.executeScript("arguments[0].style.display = 'none'", price);
+        }
 
         visual.sauceVisualCheck("Catalog", options);
         Assert.assertEquals("https://www.saucedemo.com/inventory.html", driver.getCurrentUrl());
