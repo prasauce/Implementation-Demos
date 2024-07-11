@@ -35,7 +35,7 @@ public class PerformanceTest {
         sauceOptions.put("name", "Performance Test - Swag Labs User Login");
         sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
-        sauceOptions.put("build", "Performance-Test");
+        sauceOptions.put("build", "Performance-Test-Java-TestNG");
         sauceOptions.put("extendedDebugging", true); //Enables Network Capture
         sauceOptions.put("capturePerformance", true); //Enables Performance Capture feature
         capabilities.setCapability("sauce:options", sauceOptions);

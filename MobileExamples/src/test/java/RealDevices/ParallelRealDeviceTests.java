@@ -14,19 +14,23 @@ import org.testng.annotations.Test;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  mvn test -pl MobileExamples -Dtest=ParallelRealDeviceTests
  */
 
 public class ParallelRealDeviceTests {
+    private static final String timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss").format(LocalDateTime.now());
     @DataProvider(name = "devices", parallel = true)
     public static Object[][] getBrowserConfigurations() {
         return new Object[][] {
                 {"Android", "Google Pixel.*", "^1[0-3].*"},
                 {"Android", "Samsung Galaxy.*", "^1[0-3].*"},
                 {"Android", "OnePlus.*", "^1[0-3].*"},
-                {"Android", "Xiaomi.*", "^1[0-3].*"}
+                {"Android", "Google Pixel.*", "^1[0-3].*"},
+                {"Android", "Samsung Galaxy.*", "^1[0-3].*"}
         };
     }
 
@@ -35,7 +39,7 @@ public class ParallelRealDeviceTests {
         // Set the desired capabilities for Android
         MutableCapabilities caps = new MutableCapabilities();
         caps.setCapability("platformName", platformName);
-        caps.setCapability("appium:app", "storage:filename=mda-2.0.0-21.apk");  // The filename of the mobile app
+        caps.setCapability("appium:app", "storage:filename=mda-2.0.1-22.apk");  // The filename of the mobile app
         caps.setCapability("appium:deviceName", deviceName);
         caps.setCapability("appium:platformVersion", platformVersion);
         caps.setCapability("appium:deviceOrientation", "portrait");
@@ -43,7 +47,7 @@ public class ParallelRealDeviceTests {
         MutableCapabilities sauceOptions = new MutableCapabilities();
         sauceOptions.setCapability("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.setCapability("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
-        sauceOptions.setCapability("build", "Implementation-Demo");
+        sauceOptions.setCapability("build", "Parallelization-RDC-Build-"+timestamp);
         sauceOptions.setCapability("name", "Parallel Real Devices - Select Item From Catalog");
         caps.setCapability("sauce:options", sauceOptions);
 

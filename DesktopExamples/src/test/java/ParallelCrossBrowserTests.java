@@ -7,6 +7,7 @@ import org.testng.Assert;
 
 import java.net.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -14,11 +15,11 @@ import java.util.*;
  */
 
 public class ParallelCrossBrowserTests {
+    private static final String timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss").format(LocalDateTime.now());
     // DataProvider method to provide different browser configurations for parallel test execution
     @DataProvider(name = "browsers", parallel = true)
     public static Object[][] getBrowserConfigurations() {
         return new Object[][] {
-                {"chrome", "latest", "Windows 10"},
                 {"firefox", "latest", "Windows 10"},
                 {"microsoftedge", "latest", "Windows 10"},
                 {"chrome", "latest", "macOS 13"},
@@ -28,6 +29,7 @@ public class ParallelCrossBrowserTests {
                 {"chrome", "latest", "macOS 12"},
                 {"firefox", "latest", "macOS 12"},
                 {"safari", "latest", "macOS 12"},
+                {"microsoftedge", "latest", "Windows 11"},
         };
     }
 
@@ -43,7 +45,8 @@ public class ParallelCrossBrowserTests {
         sauceOptions.put("name", "Parallel Cross Browser - Swag Labs User Login");
         sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
-        sauceOptions.put("build", "Implementation-Demo");
+        String timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss").format(LocalDateTime.now());
+        sauceOptions.put("build", "Parallelization-Example-Build-"+timestamp);
         capabilities.setCapability("sauce:options", sauceOptions);
 
         URL url = new URL("https://ondemand.us-west-1.saucelabs.com/wd/hub");

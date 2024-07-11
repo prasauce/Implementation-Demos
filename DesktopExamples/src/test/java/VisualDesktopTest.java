@@ -23,14 +23,14 @@ import com.saucelabs.visual.DataCenter;
 
 
 /**
- * mvn test -pl DesktopExamples -Dtest=VisualTest
+ * mvn test -pl DesktopExamples -Dtest=VisualDesktopTest
  */
 public class VisualDesktopTest {
     private static RemoteWebDriver driver;
     private static VisualApi visual;
     private static final String username = System.getenv("SAUCE_USERNAME");
     private static final String accessKey = System.getenv("SAUCE_ACCESS_KEY");
-    private static boolean modifyPage = true; //Set to "true" in order to demonstrate UI changes
+    private static final boolean modifyPage = Boolean.parseBoolean(System.getProperty("modifyPage", "false")); //After running initial baseline test, switch value to "true" in order to demonstrate UI changes
 
     @BeforeMethod
     public void setup(Method method) throws MalformedURLException {
@@ -39,10 +39,10 @@ public class VisualDesktopTest {
         capabilities.setCapability("browserVersion", "latest");
         capabilities.setCapability("browserName", "Chrome");
         Map<String, Object> sauceOptions = new HashMap<>();
-        sauceOptions.put("name", "Desktop - Swag Labs User Login - VISUAL TEST");
+        sauceOptions.put("name", "Desktop - Swag Labs User Login - Visual Test");
         sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
-        sauceOptions.put("build", "Visual-Demo");
+        sauceOptions.put("build", "Visual-Demo-Java-TestNG");
         sauceOptions.put("buildName", "Swag Labs");
 
         capabilities.setCapability("sauce:options", sauceOptions);
@@ -50,9 +50,10 @@ public class VisualDesktopTest {
         URL url = new URL("https://ondemand.us-west-1.saucelabs.com/wd/hub");
         driver = new RemoteWebDriver(url, capabilities);
         visual = new VisualApi.Builder(driver, username, accessKey, DataCenter.US_WEST_1)
-                .withBuild("Sauce Demo Visual Test")
+                .withBuild("Sauce Visual Test")
                 .withBranch("main")
                 .withProject("Implementation Examples")
+                .withCaptureDom(true)
                 .build();
     }
 
@@ -74,37 +75,21 @@ public class VisualDesktopTest {
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
+        //Take a visual snapshot and name it "Login Page"
+        visual.sauceVisualCheck("Login Page");
+
         js.executeScript("sauce:context=Entering Username: standard_user");
-        userNameField.sendKeys("standard_user");
+        userNameField.sendKeys(modifyPage ? "visual_user" : "standard_user");
 
         js.executeScript("sauce:context=Entering Password: **********");
         passwordField.sendKeys("secret_sauce");
-
-        //Take a visual snapshot and name it "Login Page"
-        visual.sauceVisualCheck("Login Page");
 
         js.executeScript("sauce:context=Clicking login button");
         submitButton.click();
 
         js.executeScript("sauce:context=Verifying Catalog Page is Displayed");
 
-        WebElement productText = driver.findElement(By.xpath("//*[@id=\"header_container\"]/div[2]/span"));
-        WebElement bikelight = driver.findElement(By.xpath("//*[@id=\"item_0_img_link\"]/img"));
-        WebElement cart = driver.findElement(By.xpath("//*[@id=\"shopping_cart_container\"]/a"));
-        WebElement price = driver.findElement(By.xpath("//*[@id=\"inventory_container\"]/div/div[1]/div[2]/div[2]/div"));
-
-        CheckOptions options = new CheckOptions();
-        options.setIgnoreElements(List.of(productText));
-        
-        if(modifyPage == true) { //Execute JS to modify elements to demonstrate Visual changes
-            driver.executeScript("document.getElementById('add-to-cart-sauce-labs-bolt-t-shirt').style.backgroundColor = '#cef6d1';");
-            driver.executeScript("arguments[0].innerText = 'Potatoes'", productText);
-            driver.executeScript("arguments[0].style.height = '150px'", bikelight);
-            driver.executeScript("arguments[0].style.visibility = 'hidden'", cart);
-            driver.executeScript("arguments[0].style.display = 'none'", price);
-        }
-
-        visual.sauceVisualCheck("Catalog", options);
+        visual.sauceVisualCheck("Catalog");
         Assert.assertEquals("https://www.saucedemo.com/inventory.html", driver.getCurrentUrl());
     }
 

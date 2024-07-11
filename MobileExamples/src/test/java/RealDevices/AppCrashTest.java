@@ -33,7 +33,7 @@ public class AppCrashTest {
         // Set the desired capabilities for Android
         MutableCapabilities caps = new MutableCapabilities();
         caps.setCapability("platformName", "Android");
-        caps.setCapability("appium:app", "storage:filename=mda-2.0.0-21.apk");  // The filename of the mobile app
+        caps.setCapability("appium:app", "storage:filename=mda-2.0.1-22.apk");  // The filename of the mobile app
         caps.setCapability("appium:deviceName", "Google.*");
         caps.setCapability("appium:platformVersion", "13");
         caps.setCapability("appium:deviceOrientation", "portrait");

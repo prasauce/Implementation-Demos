@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  mvn test -pl DesktopExamples -Dtest=FailureAnalysisTest
  */
-public class FailureAnalysisTest {
+public class FlakyTest {
     protected RemoteWebDriver driver;
 
     // Setting up the test environment before each test method
@@ -35,10 +35,10 @@ public class FailureAnalysisTest {
 
         // Configuring Sauce Labs options
         Map<String, Object> sauceOptions = new HashMap<>();
-        sauceOptions.put("name", "Failure Analysis Test");
+        sauceOptions.put("name", "Flaky Test Example");
         sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
-        sauceOptions.put("build", "Implementation-Demo");
+        sauceOptions.put("build", "Implementation-Demo-Java-TestNG");
 
         // Adding Sauce Labs options to capabilities
         capabilities.setCapability("sauce:options", sauceOptions);
@@ -52,37 +52,24 @@ public class FailureAnalysisTest {
     @Test
     public void userLogin() throws InterruptedException {
         // Navigating to the test application
-        driver.navigate().to("https://www.saucedemo.com");
+        //This example demonstrates when elements on a page change by disappearing/reappearing on each page load, leading to inconsistent test results
+        driver.navigate().to("https://the-internet.herokuapp.com/disappearing_elements");
 
-        // Locating web elements for username, password, and submit button
-        By usernameFieldLocator = By.cssSelector("#user-name");
-        By passwordFieldLocator = By.cssSelector("#password");
-        By submitButtonLocator = By.cssSelector(".button_action"); //Incorrect locator which will cause the test to fail on purpose
-
-        // Setting up a WebDriverWait
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameFieldLocator));
+        // Locating web element for Gallery
+        By galleryButtonLocator = By.xpath("//*[@id=\"content\"]/div/ul/li[5]/a");
 
         // Creating WebElements for the username, password, and submit button elements
-        WebElement userNameField = driver.findElement(usernameFieldLocator);
-        WebElement passwordField = driver.findElement(passwordFieldLocator);
-        WebElement submitButton = driver.findElement(submitButtonLocator);
+        WebElement galleryButton = driver.findElement(galleryButtonLocator);
 
         // Using JavascriptExecutor to add context information to the Sauce Labs test
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("sauce:context=Entering Username: standard_user");
-        userNameField.sendKeys("standard_user");
 
-        js.executeScript("sauce:context=Entering Password: **********");
-        passwordField.sendKeys("secret_sauce");
+        js.executeScript("sauce:context=Clicking on Gallery Button");
 
-        js.executeScript("sauce:context=Clicking login button");
-        submitButton.click();
-
-        js.executeScript("sauce:context=Verifying Catalog Page is Displayed");
+        galleryButton.click();
 
         // Asserting that the current URL matches the expected URL
-        Assert.assertEquals("https://www.saucedemo.com/inventory.html", driver.getCurrentUrl());
+        Assert.assertEquals("https://the-internet.herokuapp.com/gallery/", driver.getCurrentUrl());
     }
 
     // Teardown method executed after each test method

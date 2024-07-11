@@ -12,6 +12,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,7 +40,7 @@ public class BasicLoginTest {
         sauceOptions.put("name", "Desktop - Swag Labs User Login");
         sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
-        sauceOptions.put("build", "Implementation-Demo");
+        sauceOptions.put("build", "Implementation-Demo-Java-TestNG");
 
         // Adding Sauce Labs options to capabilities
         capabilities.setCapability("sauce:options", sauceOptions);

@@ -39,6 +39,8 @@ public class iOSNativeAppTest {
         MutableCapabilities sauceOptions = new MutableCapabilities();
         sauceOptions.setCapability("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.setCapability("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
+        sauceOptions.setCapability("sauceTunnel", System.getenv("SAUCE_ACCESS_KEY"));
+
         sauceOptions.setCapability("build", "Implementation-Demo");
         sauceOptions.setCapability("name", "iOS Real Device - Add Item To Cart");
         caps.setCapability("sauce:options", sauceOptions);

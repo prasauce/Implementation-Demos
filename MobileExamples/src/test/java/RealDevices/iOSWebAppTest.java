@@ -43,8 +43,8 @@ public class iOSWebAppTest {
     @Test
     public void addToCart() {
 
-        driver.navigate().to("https://www.saucedemo.com");
-
+        //driver.navigate().to("https://www.saucedemo.com");
+        driver.get("https://www.saucedemo.com");
         By usernameFieldLocator = By.cssSelector("#user-name");
         By passwordFieldLocator = By.cssSelector("#password");
         By submitButtonLocator = By.cssSelector(".btn_action");
