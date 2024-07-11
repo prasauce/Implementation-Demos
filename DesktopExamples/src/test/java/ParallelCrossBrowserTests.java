@@ -45,7 +45,6 @@ public class ParallelCrossBrowserTests {
         sauceOptions.put("name", "Parallel Cross Browser - Swag Labs User Login");
         sauceOptions.put("username", System.getenv("SAUCE_USERNAME"));
         sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESS_KEY"));
-        String timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss").format(LocalDateTime.now());
         sauceOptions.put("build", "Parallelization-Example-Build-"+timestamp);
         capabilities.setCapability("sauce:options", sauceOptions);
 
