@@ -40,6 +40,10 @@ jobs:
       run: mvn test -pl DesktopExamples -Dtest=AccessibilityTest
       continue-on-error: true
 
+    - name: Run Flaky Test
+      run: mvn test -pl DesktopExamples -Dtest=FlakyTest
+      continue-on-error: true
+
     - name: Run Performance Test
       run: mvn test -pl DesktopExamples -Dtest=PerformanceTest
       continue-on-error: true
