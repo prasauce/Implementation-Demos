@@ -39,7 +39,7 @@ public class ParallelRealDeviceTests {
         // Set the desired capabilities for Android
         MutableCapabilities caps = new MutableCapabilities();
         caps.setCapability("platformName", platformName);
-        caps.setCapability("appium:app", "storage:filename=mda-2.0.1-22.apk");  // The filename of the mobile app
+        caps.setCapability("appium:app", "storage:filename=mda-2.2.0-25.apk");  // The filename of the mobile app
         caps.setCapability("appium:deviceName", deviceName);
         caps.setCapability("appium:platformVersion", platformVersion);
         caps.setCapability("appium:deviceOrientation", "portrait");
@@ -56,7 +56,7 @@ public class ParallelRealDeviceTests {
 
         JavascriptExecutor js = driver;
 
-        By backpack = AppiumBy.accessibilityId("Sauce Labs Backpack");
+        By backpack = AppiumBy.id("com.saucelabs.mydemoapp.android:id/productIV");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.elementToBeClickable(backpack)).click();
         js.executeScript("sauce:context=Clicking on Backpack");
